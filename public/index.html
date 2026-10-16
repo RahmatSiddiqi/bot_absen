@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Kinerja Bot Dashboard</title>
+  <link rel="icon" href="https://ekinerja.paperlesshospital.id/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --success-hover: #059669;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --warning: #f59e0b;
+      --accent: #8b5cf6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 620px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .clock-card {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .clock-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .clock-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      opacity: 0.85;
+      margin-bottom: 6px;
+    }
+
+    .clock-time {
+      font-size: 46px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .clock-date {
+      font-size: 14px;
+      margin-top: 6px;
+      opacity: 0.9;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-work {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-off {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .info-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .info-value {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-checkin {
+      background: var(--success);
+      color: #ffffff;
+    }
+    .btn-checkin:hover {
+      background: var(--success-hover);
+    }
+
+    .btn-checkout {
+      background: var(--danger);
+      color: #ffffff;
+    }
+    .btn-checkout:hover {
+      background: var(--danger-hover);
+    }
+
+    .btn-refresh {
+      background: #1f2937;
+      color: var(--text-main);
+      border: 1px solid #374151;
+    }
+    .btn-refresh:hover {
+      background: #374151;
+    }
+
+    .alert-box {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .alert-info {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      color: #93c5fd;
+    }
+
+    .alert-success {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #6ee7b7;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+    }
+
+    .note-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: #0d131f;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+    .note-input:focus {
+      border-color: var(--primary);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-area">
+        <div class="logo-icon">🤖</div>
+        <div>
+          <h1>Bot E-Kinerja Absensi</h1>
+          <div class="subtitle" id="user-info">Memuat data...</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Clock -->
+    <div class="clock-card">
+      <div class="clock-label">WAKTU SERVER INDONESIA (WIB)</div>
+      <div class="clock-time" id="clock">00:00:00</div>
+      <div class="clock-date" id="date">Hari, 00 Bulan 2026</div>
+    </div>
+
+    <!-- Alert / Message -->
+    <div id="alert" class="alert-box"></div>
+
+    <!-- Attendance Details -->
+    <div class="card">
+      <div class="card-title">
+        <span>Status Absensi Hari Ini</span>
+        <span id="holiday-badge" class="status-badge badge-work">Memeriksa...</span>
+      </div>
+
+      <div class="grid-2">
+        <div class="info-box">
+          <div class="info-label">Check-In</div>
+          <div class="info-value" id="status-checkin">-</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Check-Out</div>
+          <div class="info-value" id="status-checkout">-</div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Target Check-Out Otomatis (+9 Jam)</div>
+        <div class="info-value" id="target-checkout" style="color: #60a5fa;">-</div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="card">
+      <div class="card-title">Kontrol Absensi Manual</div>
+      <input type="text" id="keterangan" class="note-input" placeholder="Keterangan opsional (misal: WFH / Dinas)..." />
+
+      <div class="grid-2">
+        <button class="btn btn-checkin" id="btn-checkin" onclick="doAction('checkin')">
+          <span>👉</span> Check-In
+        </button>
+        <button class="btn btn-checkout" id="btn-checkout" onclick="doAction('checkout')">
+          <span>🚪</span> Check-Out
+        </button>
+      </div>
+
+      <button class="btn btn-refresh" onclick="loadStatus()">
+        <span>🔄</span> Segarkan Data
+      </button>
+    </div>
+
+    <div class="footer">
+      Bot Absen E-Kinerja Cloud Edition • Deploy on Vercel
+    </div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const timeStr = new Intl.DateTimeFormat('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }).format(now);
+
+      const dateStr = new Intl.DateTimeFormat('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        dateStyle: 'full'
+      }).format(now);
+
+      document.getElementById('clock').innerText = timeStr.replace(/\./g, ':');
+      document.getElementById('date').innerText = dateStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function showAlert(msg, type = 'info') {
+      const el = document.getElementById('alert');
+      el.className = `alert-box alert-${type}`;
+      el.innerText = msg;
+      el.style.display = 'block';
+    }
+
+    async function loadStatus() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+
+        if (data.attendance?.data?.user) {
+          const u = data.attendance.data.user;
+          document.getElementById('user-info').innerText = `${u.name} (${u.employee_id || ''})`;
+        }
+
+        const holBadge = document.getElementById('holiday-badge');
+        if (data.holiday?.isOff) {
+          holBadge.className = 'status-badge badge-off';
+          holBadge.innerText = data.holiday.reason;
+        } else {
+          holBadge.className = 'status-badge badge-work';
+          holBadge.innerText = 'Hari Kerja Normal';
+        }
+
+        const att = data.attendance?.data || {};
+        const checkinEl = document.getElementById('status-checkin');
+        const checkoutEl = document.getElementById('status-checkout');
+        const targetEl = document.getElementById('target-checkout');
+
+        checkinEl.innerText = att.hasLoggedIn ? (att.waktuLogin || 'Sudah Check-In') : 'Belum';
+        checkinEl.style.color = att.hasLoggedIn ? '#34d399' : '#f87171';
+
+        checkoutEl.innerText = att.hasLoggedOut ? (att.waktuLogout || 'Sudah Check-Out') : 'Belum';
+        checkoutEl.style.color = att.hasLoggedOut ? '#34d399' : '#9ca3af';
+
+        if (att.hasLoggedIn && att.waktuLogin) {
+          const inDate = new Date(att.waktuLogin.replace(' ', 'T'));
+          if (!isNaN(inDate.getTime())) {
+            const outDate = new Date(inDate.getTime() + 9 * 60 * 60 * 1000);
+            targetEl.innerText = new Intl.DateTimeFormat('id-ID', {
+              timeZone: 'Asia/Jakarta',
+              hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            }).format(outDate).replace(/\./g, ':') + ' WIB';
+          }
+        } else {
+          targetEl.innerText = 'Menunggu Check-In (Jadwal normal: 17:00 WIB)';
+        }
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function doAction(action) {
+      const ket = encodeURIComponent(document.getElementById('keterangan').value || '');
+      showAlert(`Sedang memproses ${action}...`, 'info');
+      try {
+        const res = await fetch(`/api/${action}?keterangan=${ket}&force=true`);
+        const json = await res.json();
+        if (json.success) {
+          showAlert(json.message || `Berhasil ${action}!`, 'success');
+        } else {
+          showAlert(json.error || json.message || `Gagal ${action}!`, 'error');
+        }
+        setTimeout(loadStatus, 2000);
+      } catch (err) {
+        showAlert(`Error: ${err.message}`, 'error');
+      }
+    }
+
+    loadStatus();
+  </script>
+</body>
+</html>

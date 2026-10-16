@@ -1,0 +1,16 @@
+{
+  "name": "ekinerja-bot-absen",
+  "version": "1.0.0",
+  "description": "Bot Otomatis Absensi E-Kinerja 24/7 untuk Vercel & Node.js",
+  "main": "api/bot.js",
+  "scripts": {
+    "start": "node local_runner.js",
+    "test-login": "node -e \"require('./lib/ekinerja').testLogin()\""
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

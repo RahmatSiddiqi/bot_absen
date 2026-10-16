@@ -1,0 +1,13 @@
+{
+  "checkin_target_time": "08:00",
+  "work_duration_hours": 9.0,
+  "retry_interval_seconds": 60,
+  "latitude": 4.919988968942603,
+  "longitude": 97.79774437307512,
+  "checkin_note": "",
+  "checkout_note": "",
+  "enable_desktop_toast": true,
+  "custom_holidays": [
+    "2026-12-25"
+  ]
+}
