@@ -1,0 +1,53 @@
+name: E-Kinerja Bot Absensi Otomatis
+
+on:
+  schedule:
+    # --- JADWAL CHECK-IN PAGI (WIB = UTC + 7) ---
+    # 08:00 WIB
+    - cron: '0 1 * * 1-5'
+    # 08:10 WIB (Retry jika gagal)
+    - cron: '10 1 * * 1-5'
+    # 08:20 WIB (Retry jika gagal)
+    - cron: '20 1 * * 1-5'
+    # 08:30 WIB (Retry jika gagal)
+    - cron: '30 1 * * 1-5'
+
+    # --- JADWAL CHECK-OUT SORE (17:00 - 18:30 WIB) ---
+    # Dicek setiap 10 menit dari 17:00 sampai 18:30 WIB (10:00 - 11:30 UTC)
+    - cron: '*/10 10,11 * * 1-5'
+
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Tindakan Absensi'
+        required: true
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - checkin
+          - checkout
+
+jobs:
+  run-attendance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Jalankan Bot Absen
+        run: node actions_runner.js ${{ github.event.inputs.action || 'auto' }}
+        env:
+          EKINERJA_EMAIL: ${{ secrets.EKINERJA_EMAIL }}
+          EKINERJA_PASSWORD: ${{ secrets.EKINERJA_PASSWORD }}
+          LATITUDE: ${{ secrets.LATITUDE || '4.919988968942603' }}
+          LONGITUDE: ${{ secrets.LONGITUDE || '97.79774437307512' }}
+          WORK_DURATION_HOURS: ${{ secrets.WORK_DURATION_HOURS || '9.0' }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
