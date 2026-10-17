@@ -65,7 +65,7 @@ bot_absen/
 1. Buka file [`.env`](file:///c:/Users/Rahmat%20Siddiqi/Desktop/bot_absen/.env) menggunakan Text Editor (Notepad / VS Code).
 2. Temukan baris:
    ```env
-   EKINERJA_EMAIL=rahmatsiddiq946@gmail.com
+   EKINERJA_EMAIL=email_anda@example.com
    EKINERJA_PASSWORD=ganti_dengan_password_anda
    ```
 3. Ganti `ganti_dengan_password_anda` dengan password asli akun E-Kinerja Anda, lalu simpan file (`Ctrl + S`).

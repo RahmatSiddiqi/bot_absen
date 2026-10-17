@@ -37,8 +37,8 @@ Bot ini sekarang sudah dibuatkan versi **JavaScript (Node.js)** yang 100% kompat
 
    | Key / Nama Variabel | Value / Nilai |
    |---|---|
-   | `EKINERJA_EMAIL` | `rahmatsiddiq946@gmail.com` |
-   | `EKINERJA_PASSWORD` | `Rahmat2404!` |
+   | `EKINERJA_EMAIL` | `email_anda@example.com` |
+   | `EKINERJA_PASSWORD` | `password_anda` |
    | `LATITUDE` | `4.919988968942603` |
    | `LONGITUDE` | `97.79774437307512` |
    | `WORK_DURATION_HOURS` | `9.0` |
