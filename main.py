@@ -29,6 +29,7 @@ from core.holidays import HolidayChecker
 from core.state_manager import StateManager
 from core.notifier import Notifier
 from core.scheduler import AttendanceScheduler
+from core.crypto import load_secure_credentials
 
 # Setup logging
 log_format = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
@@ -70,8 +71,24 @@ def load_settings():
         except Exception as e:
             logger.warning(f"Gagal membaca config.json: {e}")
 
-    email = os.getenv("EKINERJA_EMAIL") or config.get("email", "")
-    password = os.getenv("EKINERJA_PASSWORD") or config.get("password", "")
+    # Prioritaskan kredensial terenkripsi (credentials.enc)
+    enc_path = os.path.join(base_dir, "credentials.enc")
+    email = ""
+    password = ""
+    if os.path.exists(enc_path):
+        try:
+            creds = load_secure_credentials(enc_path)
+            email = creds.get("email", "")
+            password = creds.get("password", "")
+            logger.info("Berhasil memuat kredensial terenkripsi (credentials.enc)")
+        except Exception as e:
+            logger.error(f"Gagal membuka kredensial terenkripsi: {e}")
+
+    # Fallback ke .env atau config.json jika belum ada credentials.enc
+    if not email:
+        email = os.getenv("EKINERJA_EMAIL") or config.get("email", "")
+    if not password:
+        password = os.getenv("EKINERJA_PASSWORD") or config.get("password", "")
     lat = float(os.getenv("LATITUDE") or config.get("latitude", 5.2447668))
     lng = float(os.getenv("LONGITUDE") or config.get("longitude", 96.9965177))
 
