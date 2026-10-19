@@ -2,28 +2,20 @@
 title Bot Absensi E-Kinerja Otomatis 24/7
 color 0A
 chcp 65001 >nul
+cd /d "%~dp0"
+
+set "PY=python"
+if exist "C:\laragon\bin\python\python-3.10\python.exe" (
+    set "PY=C:\laragon\bin\python\python-3.10\python.exe"
+)
 
 echo ==============================================================
 echo       🤖 MEMULAI BOT ABSENSI E-KINERJA (24/7)
 echo ==============================================================
+echo Menggunakan Python: %PY%
 echo.
 
-cd /d "%~dp0"
-
-:: Cek Python
-python --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo [ERROR] Python tidak ditemukan di sistem Anda!
-    echo Silakan install Python terlebih dahulu dari https://www.python.org/
-    pause
-    exit /b 1
-)
-
-:: Cek & Install Requirements jika belum terpasang
-pip install -r requirements.txt --quiet >nul 2>&1
-
-:: Jalankan Bot
-python main.py
+"%PY%" main.py
 
 if %errorlevel% neq 0 (
     echo.
